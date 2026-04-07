@@ -395,10 +395,8 @@ public class AudioService extends MediaBrowserServiceCompat {
 
         if (config.activityClassName != null) {
             Context context = getApplicationContext();
-            Intent intent = new Intent((String)null);
+            Intent intent = new Intent(NOTIFICATION_CLICK_ACTION);
             intent.setComponent(new ComponentName(context, config.activityClassName));
-            //Intent intent = new Intent(context, config.activityClassName);
-            intent.setAction(NOTIFICATION_CLICK_ACTION);
             int flags = PendingIntent.FLAG_UPDATE_CURRENT;
             if (Build.VERSION.SDK_INT >= 23) {
                 flags |= PendingIntent.FLAG_IMMUTABLE;

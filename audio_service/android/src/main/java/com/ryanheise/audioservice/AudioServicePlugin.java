@@ -400,8 +400,10 @@ public class AudioServicePlugin implements FlutterPlugin, ActivityAware {
 
     private void sendNotificationClicked() {
         Activity activity = clientInterface.activity;
-        if (audioHandlerInterface != null && activity.getIntent().getAction() != null) {
-            boolean clicked = activity.getIntent().getAction().equals(AudioService.NOTIFICATION_CLICK_ACTION);
+        if (activity == null || audioHandlerInterface == null) return;
+        Intent intent = activity.getIntent();
+        if (intent != null && intent.getAction() != null) {
+            boolean clicked = intent.getAction().equals(AudioService.NOTIFICATION_CLICK_ACTION);
             audioHandlerInterface.invokeMethod("onNotificationClicked", mapOf("clicked", clicked));
         }
     }
@@ -450,7 +452,10 @@ public class AudioServicePlugin implements FlutterPlugin, ActivityAware {
 
         // See: https://stackoverflow.com/questions/13135545/android-activity-is-using-old-intent-if-launching-app-from-recent-task
         protected boolean wasLaunchedFromRecents() {
-            return (activity.getIntent().getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY;
+            if (activity == null) return false;
+            Intent intent = activity.getIntent();
+            if (intent == null) return false;
+            return (intent.getFlags() & Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY;
         }
 
         @Override
